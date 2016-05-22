@@ -23,15 +23,15 @@
   (let [rows (reverse (apply map vector board))
         col-idxs (apply str (interleave (repeat " ")
                                         (range (count board))))
-        output-width (count col-idxs)]
+        output-width (inc (count col-idxs))]
     (println (apply str (repeat output-width "=")))
     (doseq [row rows] (println row))
     (println col-idxs)
     (println (apply str (repeat output-width "=")))))
 
-(defn get-pos [[row col] board]
+(defn get-pos [[col row] board]
   "Returns the piece in the given position on the board."
-  (get (get board col) row))
+  (get-in board [col row]))
 
 (defn get-col [col board]
   "Returns a list of pieces in the given column of the board,
@@ -73,8 +73,7 @@
   (let [columns board
         rows (apply map vector board)
         diags (get-diags board)]
-    (some (fn [line] (#{x o} (get-winner line)))
-          (concat columns rows diags))))
+    (some (fn [line] (#{x o} (get-winner line))) (concat columns rows diags))))
 
 (defn display [board msg]
   "Displays the game board and a message to the players."
